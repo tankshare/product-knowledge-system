@@ -1,0 +1,23 @@
+# WorkBuddy 系统文件
+.workbuddy/
+
+# Windows 系统文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE 配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 临时文件
+*.tmp
+*.log
+
+# macOS 系统文件
+.DS_Store
+.AppleDouble
+.LSOverride
