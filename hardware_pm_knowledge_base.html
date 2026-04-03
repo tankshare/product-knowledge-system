@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>市场部经理产品知识体系</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 320px;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            padding: 30px 20px;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .sidebar .subtitle {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-bottom: 30px;
+        }
+
+        /* 进度条 */
+        .progress-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* 搜索框 */
+        .search-box {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-box input:focus {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 分类导航 */
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #95a5a6;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            font-weight: 600;
+        }
+
+        .nav-item .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        /* 章节列表 */
+        .chapter-list {
+            display: none;
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .chapter-list.show {
+            display: block;
+        }
+
+        .chapter-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #bdc3c7;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 5px;
+        }
+
+        .chapter-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .chapter-item.active {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .content-header h2 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .content-header .meta {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .content-body {
+            line-height: 1.8;
+            color: #34495e;
+        }
+
+        .content-body h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .content-body h4 {
+            font-size: 20px;
+            color: #34495e;
+            margin: 25px 0 12px;
+        }
+
+        .content-body p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .content-body ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .content-body li {
+            margin-bottom: 8px;
+        }
+
+        /* 案例分析框 */
+        .case-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .case-box h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-header h2 {
+                font-size: 24px;
+            }
+
+            .content-body h3 {
+                font-size: 20px;
+            }
+
+            .sidebar {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <aside class="sidebar">
+            <h1>📚 产品知识体系</h1>
+            <p class="subtitle">市场部经理专用 · 30期系统学习</p>
+
+            <!-- 进度条 -->
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>学习进度</span>
+                    <span id="progress-text">0/30</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- 搜索框 -->
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="搜索知识点...">
+            </div>
+
+            <!-- 分类导航 -->
+            <div class="nav-section">
+                <div class="nav-title">📁 知识分类</div>
+                <div class="nav-item" onclick="toggleCategory('market')">
+                    <span>🎯 市场分析</span>
+                    <span class="badge">10</span>
+                </div>
+                <div class="nav-item" onclick="toggleCategory('product')">
+                    <span>📦 产品管理</span>
+                    <span class="badge">8</span>
+                </div>
+                <div class="nav-item" onclick="toggleCategory('tech')">
+                    <span>⚙️ 技术基础</span>
+                    <span class="badge">6</span>
+                </div>
+                <div class="nav-item" onclick="toggleCategory('trend')">
+                    <span>📈 行业趋势</span>
+                    <span class="badge">6</span>
+                </div>
+            </div>
+
+            <!-- 章节列表 -->
+            <div class="nav-section">
+                <div class="nav-title">📋 所有章节</div>
+                <div id="chapters-container">
+                    <!-- 章节将通过 JavaScript 动态加载 -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div id="content-area">
+                <div class="content-header">
+                    <h2>欢迎使用产品知识体系</h2>
+                    <p class="meta">市场部经理专业成长指南</p>
+                </div>
+                <div class="content-body">
+                    <p>这是一个专门为市场部经理设计的产品知识体系，共30期内容，涵盖市场分析、产品管理、技术基础和行业趋势四大核心领域。</p>
+
+                    <h3>📊 知识体系结构</h3>
+                    <ul>
+                        <li><strong>市场分析（10期）</strong>：市场调研、竞争分析、用户洞察、数据分析等</li>
+                        <li><strong>产品管理（8期）</strong>：产品规划、需求管理、产品发布、产品优化等</li>
+                        <li><strong>技术基础（6期）</strong>：技术原理、技术选型、技术评估、技术趋势等</li>
+                        <li><strong>行业趋势（6期）</strong>：行业动态、新技术应用、未来趋势、战略布局等</li>
+                    </ul>
+
+                    <h3>🎯 学习目标</h3>
+                    <p>通过系统学习，帮助市场部经理：</p>
+                    <ul>
+                        <li>深入理解产品全生命周期管理</li>
+                        <li>掌握核心技术原理与趋势</li>
+                        <li>提升数据驱动决策能力</li>
+                        <li>增强跨部门协作效率</li>
+                        <li>培养战略思维与前瞻视野</li>
+                    </ul>
+
+                    <h3>📖 使用说明</h3>
+                    <ol>
+                        <li>点击左侧章节列表选择要学习的内容</li>
+                        <li>使用搜索框快速查找特定知识点</li>
+                        <li>进度条会自动记录你的学习进度</li>
+                        <li>每天12:30会自动更新一期新内容</li>
+                    </ol>
+
+                    <div class="case-box">
+                        <h5>💡 学习建议</h5>
+                        <p>建议每天花费30-45分钟学习一期内容，并结合实际工作案例进行思考和实践。每周回顾本周学习要点，形成知识闭环。</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 知识库数据（从文件加载）
+        let knowledgeData = [];
+        let currentChapter = null;
+
+        // 初始化
+        async function init() {
+            await loadChapters();
+            updateProgress();
+            setupSearch();
+        }
+
+        // 加载章节列表
+        async function loadChapters() {
+            const container = document.getElementById('chapters-container');
+
+            // 模拟章节数据（实际应从文件读取）
+            knowledgeData = [
+                { id: 1, title: '第1期：市场调研方法论', category: 'market', status: 'completed' },
+                { id: 2, title: '第2期：用户画像构建', category: 'market', status: 'completed' },
+                { id: 3, title: '第3期：竞争分析框架', category: 'market', status: 'pending' },
+                // 更多章节...
+            ];
+
+            container.innerHTML = knowledgeData.map(chapter => `
+                <div class="chapter-item ${chapter.status === 'completed' ? 'completed' : ''}"
+                     data-id="${chapter.id}"
+                     onclick="loadChapter(${chapter.id})">
+                    ${chapter.status === 'completed' ? '✅' : '⭕'} ${chapter.title}
+                </div>
+            `).join('');
+        }
+
+        // 加载章节内容
+        async function loadChapter(id) {
+            const chapter = knowledgeData.find(c => c.id === id);
+            if (!chapter) return;
+
+            // 更新选中状态
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.chapter-item[data-id="${id}"]`).classList.add('active');
+
+            // 加载内容文件
+            try {
+                const response = await fetch(`hardware_pm_知识体系_第${id}期.html`);
+                if (response.ok) {
+                    const html = await response.text();
+                    document.getElementById('content-area').innerHTML = html;
+
+                    // 标记为已完成
+                    chapter.status = 'completed';
+                    updateProgress();
+                    saveProgress();
+                } else {
+                    // 文件不存在，显示占位内容
+                    showPlaceholder(chapter);
+                }
+            } catch (error) {
+                showPlaceholder(chapter);
+            }
+        }
+
+        // 显示占位内容
+        function showPlaceholder(chapter) {
+            document.getElementById('content-area').innerHTML = `
+                <div class="content-header">
+                    <h2>${chapter.title}</h2>
+                    <p class="meta">📅 待发布 · 预计发布时间：每日12:30</p>
+                </div>
+                <div class="content-body">
+                    <div class="case-box">
+                        <h5>⏳ 内容生成中</h5>
+                        <p>该章节内容正在准备中，将在每天的12:30自动发布。请耐心等待...</p>
+                    </div>
+                    <p>本知识体系采用自动化生成方式，每天更新一期。系统会根据市场部经理的实际工作需求，生成专业、实用的内容。</p>
+                </div>
+            `;
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const completed = knowledgeData.filter(c => c.status === 'completed').length;
+            const total = knowledgeData.length;
+            const percentage = (completed / total) * 100;
+
+            document.getElementById('progress-text').textContent = `${completed}/${total}`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+        }
+
+        // 保存进度到本地存储
+        function saveProgress() {
+            localStorage.setItem('knowledgeProgress', JSON.stringify(knowledgeData));
+        }
+
+        // 搜索功能
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = knowledgeData.filter(c =>
+                    c.title.toLowerCase().includes(query)
+                );
+
+                const container = document.getElementById('chapters-container');
+                container.innerHTML = filtered.map(chapter => `
+                    <div class="chapter-item ${chapter.status === 'completed' ? 'completed' : ''}"
+                         data-id="${chapter.id}"
+                         onclick="loadChapter(${chapter.id})">
+                        ${chapter.status === 'completed' ? '✅' : '⭕'} ${chapter.title}
+                    </div>
+                `).join('');
+            });
+        }
+
+        // 分类筛选
+        function toggleCategory(category) {
+            const filtered = knowledgeData.filter(c => c.category === category);
+
+            const container = document.getElementById('chapters-container');
+            container.innerHTML = filtered.map(chapter => `
+                <div class="chapter-item ${chapter.status === 'completed' ? 'completed' : ''}"
+                     data-id="${chapter.id}"
+                     onclick="loadChapter(${chapter.id})">
+                    ${chapter.status === 'completed' ? '✅' : '⭕'} ${chapter.title}
+                </div>
+            `).join('');
+
+            // 更新分类选中状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
